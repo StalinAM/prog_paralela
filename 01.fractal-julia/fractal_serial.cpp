@@ -1,12 +1,12 @@
 #include "fractal_serial.h"
-
 #include <complex>
+#include "palette.h"
 
 // variables externas definidas en main.cpp
 extern int max_iterations;     // número máximo de iteraciones antes de declarar "no divergente"
 extern std::complex<double> c; // constante 'c' del conjunto de Julia
 
-int acotado_1(std::complex<double> z0)
+uint32_t acotado_1(std::complex<double> z0)
 {
     /**
      * z_{n+1} = z_n^2 + c
@@ -24,10 +24,13 @@ int acotado_1(std::complex<double> z0)
 
     // Si diverge antes de agotar iteraciones, asignamos un color según la paleta
     if (iter < max_iterations)
+    {
+
         // la norma > 2
-        return 0xFF0000FF; // quiero color rojo (AABBGGRR)
-    else
-        return 0xFF000000; // quiero color negro (AABBGGRR)
+        int index = iter % PALETTE_SIZE; // índice para la paleta (ciclo a través de los colores)
+        return color_ramp[index];        // devolvemos el color correspondiente de la paleta
+    }
+    return 0xFF000000; // quiero color negro (AABBGGRR)
 }
 
 void julia_serial_1(double x_min, double y_min, double x_max, double y_max, uint32_t width, uint32_t height, uint32_t *pixel_buffer)
@@ -58,7 +61,7 @@ void julia_serial_1(double x_min, double y_min, double x_max, double y_max, uint
     }
 }
 
-int acotado_2(double x, double y)
+uint32_t acotado_2(double x, double y)
 {
     // calculos manuales
     int iter = 1;
@@ -77,10 +80,12 @@ int acotado_2(double x, double y)
     }
 
     if (iter < max_iterations)
+    {
         // la norma > 2
-        return 0xFF0000FF; // quiero color rojo (AABBGGRR)
-    else
-        return 0xFF000000; // quiero color negro (AABBGGRR)
+        int index = iter % PALETTE_SIZE; // índice para la paleta (ciclo a través de los colores)
+        return color_ramp[index];        // devolvemos el color correspondiente de la paleta
+    }
+    return 0xFF000000; // quiero color negro (AABBGGRR)
 }
 
 void julia_serial_2(double x_min, double y_min, double x_max, double y_max, uint32_t width, uint32_t height, uint32_t *pixel_buffer)
