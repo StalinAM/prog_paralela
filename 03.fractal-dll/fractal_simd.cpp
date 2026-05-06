@@ -94,7 +94,7 @@ extern "C" __stdcall // declarar la función con enlace C para evitar name mangl
                     }
                     else
                     {
-                        pixel_buffer[index] = 0xFF000000; // Negro
+                        pixel_buffer[index] = 0x000000FF; // Negro
                     }
                 }
             }
