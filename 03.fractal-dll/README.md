@@ -71,3 +71,9 @@ Ejemplo de salida:
         DLL Name: api-ms-win-crt-stdio-l1-1-0.dll
         DLL Name: api-ms-win-crt-string-l1-1-0.dll
 ```
+
+En el proyecto de JAVA usar el PATH como variable de entorno
+
+```
+D:\DEV\tools\mingw64\bin;D:\DEV\tools\prog-paralela\03.fractal-dll\build\Release
+```
