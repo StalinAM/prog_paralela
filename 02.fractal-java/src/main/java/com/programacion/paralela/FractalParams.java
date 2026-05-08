@@ -35,5 +35,24 @@ public class FractalParams {
             (0xFF0F0202),
             (0xFF000000)
     };
+    public static final int[] color_ramp_thread = {
+            (0x0F93FFFF),
+            (0x0E89EEFF),
+            (0x0D7FDDFF),
+            (0x0C75CCFF),
+            (0x0B6BBBFF),
+            (0x0A62AAFF),
+            (0x095899FF),
+            (0x084E88FF),
+            (0x074477FF),
+            (0x063A66FF),
+            (0x053155FF),
+            (0x042744FF),
+            (0x031D33FF),
+            (0x021322FF),
+            (0x010911FF),
+            (0x000000FF)
+
+    };
 
 }

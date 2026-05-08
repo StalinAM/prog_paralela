@@ -34,11 +34,12 @@ public class FractalMain {
     private int[] overlayPixels;
 
     private static final int OVERLAY_WIDTH = 300;
-    private static final int OVERLAY_HEIGHT = 90;
+    private static final int OVERLAY_HEIGHT = 110;
     private static final int OVERLAY_MARGIN = 10;
 
     FractalCpu fractalCpu;
     FractalSimd fractalSimd;
+    FractalThreads fractalThreads;
     FPSCounter fpsCounter;
 
     int modo = 1;
@@ -46,6 +47,7 @@ public class FractalMain {
     public FractalMain() {
         fractalCpu = new FractalCpu();
         fractalSimd = new FractalSimd();
+        fractalThreads = new FractalThreads();
 
         fpsCounter = new FPSCounter();
 
@@ -101,6 +103,10 @@ public class FractalMain {
                 System.out.println("Modo C/C++ SIMD");
                 modo = 2;
                 fractalSimd = new FractalSimd();
+            } else if (key == GLFW_KEY_3 && action == GLFW_RELEASE) {
+                System.out.println("Modo Java Hilos");
+                modo = 3;
+                fractalThreads = new FractalThreads();
             }
 
         });
@@ -209,7 +215,6 @@ public class FractalMain {
     private void paint() {
 
         int fps = fpsCounter.update();
-        System.out.println("FPS: " + fps);
 
         pixelBuffer.clear();
 
@@ -220,6 +225,10 @@ public class FractalMain {
         } else if (modo == 2) {
             fractalSimd.juliaSimd();
             pixelBuffer.put(fractalSimd.pixelBuffer.asIntBuffer());
+        } else if (modo == 3) {
+            fractalThreads.julia_threads(FractalParams.xMin, FractalParams.yMin, FractalParams.xMax, FractalParams.yMax,
+                    FractalParams.WIDTH, FractalParams.HEIGHT);
+            pixelBuffer.put(fractalThreads.pixel_buffer);
         }
 
         pixelBuffer.flip();
@@ -263,9 +272,10 @@ public class FractalMain {
 
         overlayGraphics.setColor(Color.WHITE);
         overlayGraphics.drawString("FPS: " + fps, 10, 20);
-        overlayGraphics.drawString("[1] CPU  [2] SIMD", 10, 40);
-        overlayGraphics.drawString("UP/DOWN: iteraciones", 10, 60);
-        overlayGraphics.drawString("ESC: salir", 10, 80);
+        overlayGraphics.drawString("[1] CPU  [2] SIMD  [3] HILOS", 10, 40);
+        overlayGraphics.drawString("Iteraciones:" + FractalParams.max_iteraciones, 10, 60);
+        overlayGraphics.drawString("Hilos:" + Runtime.getRuntime().availableProcessors(), 10, 80);
+        overlayGraphics.drawString("ESC: salir", 10, 100);
 
         overlayImage.getRGB(0, 0, OVERLAY_WIDTH, OVERLAY_HEIGHT, overlayPixels, 0, OVERLAY_WIDTH);
         overlayBuffer.clear();
