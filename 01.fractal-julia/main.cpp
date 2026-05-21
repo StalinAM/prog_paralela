@@ -1,9 +1,11 @@
 #include <fmt/core.h>
 #include <SFML/Graphics.hpp>
-
 #include <complex>
+#include <omp.h>
+
 #include "fractal_serial.h"
 #include "fractal_simd.h"
+#include "fractal_openmp.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -31,11 +33,22 @@ enum class runtime_type
 {
     SERIAL_1 = 0,
     SERIAL_2,
-    SIMD
+    SIMD,
+    OPENMP_REGIONES,
+    OPENMP_FOR,
+    OPENMP_FOR_SIMD
 };
 
 int main()
 {
+    int num_threads;
+#pragma omp parallel
+    {
+#pragma omp master
+        {
+            num_threads = omp_get_num_threads();
+        }
+    }
 
     runtime_type r_type = runtime_type::SERIAL_1;
 
@@ -105,6 +118,15 @@ int main()
                 case sf::Keyboard::Scan::Num3:
                     r_type = runtime_type::SIMD;
                     break;
+                case sf::Keyboard::Scan::Num4:
+                    r_type = runtime_type::OPENMP_REGIONES;
+                    break;
+                case sf::Keyboard::Scan::Num5:
+                    r_type = runtime_type::OPENMP_FOR;
+                    break;
+                case sf::Keyboard::Scan::Num6:
+                    r_type = runtime_type::OPENMP_FOR_SIMD;
+                    break;
 
                 default:
                     break;
@@ -128,6 +150,21 @@ int main()
         {
             mode = "SIMD";
             julia_simd(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, pixel_buffer);
+        }
+        else if (r_type == runtime_type::OPENMP_REGIONES)
+        {
+            mode = "OpenMP Regiones [Threads: " + std::to_string(num_threads) + "]";
+            julia_openmp_regiones(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, pixel_buffer);
+        }
+        else if (r_type == runtime_type::OPENMP_FOR)
+        {
+            mode = "OpenMP For [Threads: " + std::to_string(num_threads) + "]";
+            julia_openmp_for(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, pixel_buffer);
+        }
+        else if (r_type == runtime_type::OPENMP_FOR_SIMD)
+        {
+            mode = "OpenMP For SIMD [Threads: " + std::to_string(num_threads) + "]";
+            julia_openmp_for_simd(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, pixel_buffer);
         }
 
         // dibujamos
