@@ -46,7 +46,7 @@ void julia_serial_1(double x_min, double y_min, double x_max, double y_max, uint
         {
             // Mapeo del índice de píxel a coordenadas complejas (x, y)
             double x = x_min + i * dx;
-            double y = y_min + j * dy;
+            double y = y_max - j * dy;
 
             std::complex<double> z(x, y); // punto complejo inicial z0
 
@@ -99,7 +99,7 @@ void julia_serial_2(double x_min, double y_min, double x_max, double y_max, uint
         for (int j = 0; j < height; j++)
         {
             double x = x_min + i * dx;
-            double y = y_min + j * dy;
+            double y = y_max - j * dy;
             // no vamos a usar complejos
 
             auto color = acotado_2(x, y); // auto es igual a var --> inferencia de tipos

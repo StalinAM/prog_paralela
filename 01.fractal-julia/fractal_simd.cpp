@@ -42,7 +42,7 @@ void julia_simd(double x_min, double y_min, double x_max, double y_max, uint32_t
 
             // x_min+mx*scale -->(x,,0,x1,x2,x3,x4,x5,x6,x7) <-- REAL
             __m256 cr = _mm256_add_ps(xmin, _mm256_mul_ps(mx, xscale));
-            // x_max-my*scale -->(y,,y0,y1,y2,y3,y4,y5,y6,y7) <-- IMAGINARIO
+            // y_max-my*scale -->(y,,y0,y1,y2,y3,y4,y5,y6,y7) <-- IMAGINARIO
             __m256 ci = _mm256_sub_ps(ymax, _mm256_mul_ps(my, yscale));
 
             // verificar si 8 compeljos cr y ci estan acotados
